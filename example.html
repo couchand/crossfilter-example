@@ -7,5 +7,38 @@
     <script src="lib/crossfilter.js"></script>
   </head>
 <body>
+  <div class="field-list">
+    <ul>
+      <li>Name</li>
+      <li>Rating</li>
+      <li>Appearance</li>
+      <li>Aroma</li>
+      <li>Flavor</li>
+      <li>Palate</li>
+      <li>Overall</li>
+    </ul>
+  </div>
+  <div class="filter-list">
+    <ul>
+      <li>Rating
+        from <select class="filter-minimum">
+          <option value="pp">++</option>
+          <option value="p">+</option>
+          <option value="pm">+/-</option>
+          <option value="m">-</option>
+          <option value="mm">--</option>
+        </select>
+        to <select class="filter-minimum">
+          <option value="pp">++</option>
+          <option value="p">+</option>
+          <option value="pm">+/-</option>
+          <option value="m">-</option>
+          <option value="mm">--</option>
+        </select>
+      </li>
+    </ul>
+  </div>
+  <div class="live-report">
+  </div>
 </body>
 </html>
