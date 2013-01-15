@@ -5,6 +5,31 @@
     <title>Report Builder Example</title>
  
     <script src="lib/crossfilter.js"></script>
+    <script src="ratings.js"></script>
+    <script>
+      var allRatings = crossfilter(ratings);
+      var rating = allRatings.dimension(function(d){
+        var r = d.rating;
+        return (r=='++'?5:(r=='+'?4:(r=='+/-'?3:(r=='-'?2:1))));
+      });
+      var appearance = allRatings.dimension(function(d){ return d.appearance; });
+      var aroma = allRatings.dimension(function(d){ return d.aroma; });
+      var flavor = allRatings.dimension(function(d){ return d.flavor; });
+      var palate = allRatings.dimension(function(d){ return d.palate; });
+      var overall = allRatings.dimension(function(d){ return d.overall; });
+      var total = allRatings.dimension(function(d){
+        var total = 0;
+        for (var p in d){
+          if (p != 'rating' && p != 'i'){
+            total += d[p];
+          }
+        }
+        return total;
+      });
+      var totalByBaseRatings = total.group(function(v){
+        return Math.floor((v+5)/10);
+      });
+    </script>
   </head>
 <body>
   <div class="field-list">
