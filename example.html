@@ -6,18 +6,22 @@
  
     <script src="lib/crossfilter.js"></script>
     <script src="ratings.js"></script>
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
     <script>
       var allRatings = crossfilter(ratings);
       var rating = allRatings.dimension(function(d){
         var r = d.rating;
         return (r=='++'?5:(r=='+'?4:(r=='+/-'?3:(r=='-'?2:1))));
       });
-      var appearance = allRatings.dimension(function(d){ return d.appearance; });
-      var aroma = allRatings.dimension(function(d){ return d.aroma; });
-      var flavor = allRatings.dimension(function(d){ return d.flavor; });
-      var palate = allRatings.dimension(function(d){ return d.palate; });
-      var overall = allRatings.dimension(function(d){ return d.overall; });
-      var total = allRatings.dimension(function(d){
+      var dims = {};
+      dims['appearance'] = allRatings.dimension(function(d){ return d.appearance; });
+      dims['aroma'] = allRatings.dimension(function(d){ return d.aroma; });
+      dims['flavor'] = allRatings.dimension(function(d){ return d.flavor; });
+      dims['palate'] = allRatings.dimension(function(d){ return d.palate; });
+      dims['overall'] = allRatings.dimension(function(d){ return d.overall; });
+      dims['total'] = allRatings.dimension(function(d){
         var total = 0;
         for (var p in d){
           if (p != 'rating' && p != 'i'){
@@ -26,8 +30,37 @@
         }
         return total;
       });
-      var totalByBaseRatings = total.group(function(v){
+      dims['totalByBaseRatings'] = dims['total'].group(function(v){
         return Math.floor((v+5)/10);
+      });
+
+      $(function(){
+
+          function createFilter(field, appendTo){
+            $('<li>').append(field)
+                     .append( $('<div id="'+field+'-min"/><div id="'+field+'"/><div id="'+field+'-max"/>') )
+                     .appendTo(appendTo);
+
+            $('#'+field).slider({
+              range: true,
+              min: dims[field].bottom(1)[0][field],
+              max: dims[field].top(1)[0][field],
+              slide: function(event,ui){
+                  $('#'+field+'-min').text(ui.values[0]);
+                  $('#'+field+'-max').text(ui.values[1]);
+                  dims[field].filterRange([ui.values[0],ui.values[1]+1]);
+              }
+            });
+          }
+
+          var filterList = $('.filter-list').find('.filter-minimum').val('mm').end()
+                                            .find('.filter-maximum').val('pp').end()
+                                            .find('ul');
+
+          $.each(['appearance','aroma','flavor','palate','overall'], function(index,type){
+            createFilter(type, filterList);
+          });
+
       });
     </script>
   </head>
