@@ -36,6 +36,10 @@
         return Math.floor((v+5)/10);
       });
 
+      function countRatings(){
+        return allRatings.groupAll().value();
+      }
+
       $(function(){
 
           function createFilter(field, appendTo){
