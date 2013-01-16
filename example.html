@@ -10,6 +10,16 @@
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
     <script>
+      function totalRating(d){
+        var total = 0;
+        for (var p in d){
+          if (p != 'rating' && p != 'i'){
+            total += d[p];
+          }
+        }
+        return total;
+      }
+
       var allRatings = crossfilter(ratings);
       var rating = allRatings.dimension(function(d){
         var r = d.rating;
@@ -21,15 +31,7 @@
       dims['flavor'] = allRatings.dimension(function(d){ return d.flavor; });
       dims['palate'] = allRatings.dimension(function(d){ return d.palate; });
       dims['overall'] = allRatings.dimension(function(d){ return d.overall; });
-      dims['total'] = allRatings.dimension(function(d){
-        var total = 0;
-        for (var p in d){
-          if (p != 'rating' && p != 'i'){
-            total += d[p];
-          }
-        }
-        return total;
-      });
+      dims['total'] = allRatings.dimension(totalRating);
       dims['totalByBaseRatings'] = dims['total'].group(function(v){
         return Math.floor((v+5)/10);
       });
