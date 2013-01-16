@@ -72,7 +72,16 @@
             var markup = $('<ul>');
             var ratings = dims['total'].top(20);
             for (var i = 0; i < ratings.length; i++){
-              markup.append('<li>'+ratings[i].i+': '+totalRating(ratings[i])+'</li>');
+              markup.append(
+                '<li>rating ' + ratings[i].i + ': ' +
+                totalRating(ratings[i]) + ' (' +
+                ratings[i].appearance + '-' +
+                ratings[i].aroma + '-' +
+                ratings[i].flavor + '-' +
+                ratings[i].palate + '-' +
+                ratings[i].overall +
+                ')</li>'
+              );
             }
             if (ratings.length < countRatings()){
               markup.append('<li>...</li>');
