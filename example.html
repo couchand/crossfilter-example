@@ -55,6 +55,7 @@
                   $('#'+field+'-min').text(ui.values[0]);
                   $('#'+field+'-max').text(ui.values[1]);
                   dims[field].filterRange([ui.values[0],ui.values[1]+1]);
+                  $('.live-report').trigger('update');
               }
             });
           }
@@ -65,6 +66,18 @@
 
           $.each(['appearance','aroma','flavor','palate','overall'], function(index,type){
             createFilter(type, filterList);
+          });
+
+          $('.live-report').on('update', function(){
+            var markup = $('<ul>');
+            var ratings = dims['total'].top(20);
+            for (var i = 0; i < ratings.length; i++){
+              markup.append('<li>'+ratings[i].i+': '+totalRating(ratings[i])+'</li>');
+            }
+            if (ratings.length < countRatings()){
+              markup.append('<li>...</li>');
+            }
+            $(this).empty().append( markup );
           });
 
       });
